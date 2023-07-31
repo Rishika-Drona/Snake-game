@@ -20,41 +20,41 @@ offsets = {
 }
 
 def r():
-    global saap, kata, khanaT, pen
-    saap = [[0, 0], [0, 20], [0, 40], [0, 60], [0, 80]]
-    kata = "up"
-    khanaT = nun()
-    food.goto(khanaT)
+    global snake, turn, ballX, pen
+    snake = [[0, 0], [0, 20], [0, 40], [0, 60], [0, 80]]
+    turn = "up"
+    ballX = nun()
+    food.goto(ballX)
     hall()
 
 def hall():
-    global kata
+    global turn
 
-    new_head = saap[-1].copy()
-    new_head[0] = saap[-1][0] + offsets[kata][0]
-    new_head[1] = saap[-1][1] + offsets[kata][1]
+    new_head = snake[-1].copy()
+    new_head[0] = snake[-1][0] + offsets[turn][0]
+    new_head[1] = snake[-1][1] + offsets[turn][1]
 
-    if new_head in saap[:-1]:  
+    if new_head in snake[:-1]:  
         r()
     else:
-        saap.append(new_head)
+        snake.append(new_head)
 
-        if not khana():
-            saap.pop(0)  
+        if not ball():
+            snake.pop(0)  
 
-        if saap[-1][0] > w / 2:
-            saap[-1][0] -= w
-        elif saap[-1][0] < - w / 2:
-            saap[-1][0] += w
-        elif saap[-1][1] > h / 2:
-            saap[-1][1] -= h
-        elif saap[-1][1] < -h / 2:
-            saap[-1][1] += h
+        if snake[-1][0] > w / 2:
+            snake[-1][0] -= w
+        elif snake[-1][0] < - w / 2:
+            snake[-1][0] += w
+        elif snake[-1][1] > h / 2:
+            snake[-1][1] -= h
+        elif snake[-1][1] < -h / 2:
+            snake[-1][1] += h
 
         pen.clearstamps()
  #clears all the stamps
 
-        for segment in saap:
+        for segment in snake:
             pen.goto(segment[0], segment[1])
             pen.stamp()
 
@@ -63,11 +63,11 @@ def hall():
 
         turtle.ontimer(hall, d)
 
-def khana():
-    global khanaT
-    if dist(saap[-1], khanaT) < 20:
-        khanaT = nun()
-        food.goto(khanaT)
+def ball():
+    global ballX
+    if dist(snake[-1], ballX) < 20:
+        ballX = nun()
+        food.goto(ballX)
         return True
     return False
 
@@ -82,29 +82,29 @@ def dist(poos1, poos2):
     distance = ((y2 - y1) ** 2 + (x2 - x1) ** 2) ** 0.5
     return distance
 
-def mathi():
-    global kata
-    if kata != "down":
-        kata = "up"
+def go_up():
+    global turn
+    if turn != "down":
+        turn = "up"
 
 def go_right():
-    global kata
-    if kata != "left":
-        kata = "right"
+    global turn
+    if turn != "left":
+        turn = "right"
 
 def go_down():
-    global kata
-    if kata != "up":
-        kata = "down"
+    global turn
+    if turn != "up":
+        turn = "down"
 
 def go_left():
-    global kata
-    if kata != "right":
-        kata = "left"
+    global turn
+    if turn != "right":
+        turn = "left"
 
 screen = turtle.Screen()
 screen.setup(w, h)
-screen.title("saap")
+screen.title("snake")
 screen.bgcolor("green")
 screen.setup(500, 500)
 screen.tracer(0)
@@ -119,7 +119,7 @@ food.shapesize(fs / 20)
 food.penup()
 
 screen.listen()
-screen.onkey(mathi, "Up")
+screen.onkey(go_up, "Up")
 screen.onkey(go_right, "Right")
 screen.onkey(go_down, "Down")
 screen.onkey(go_left, "Left")
